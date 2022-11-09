@@ -5,6 +5,12 @@ SE Year 3 Sem 2
 
 For all lecture notes, labs, tutorials, answer scripts and learning material. 
 
+## Contributors
+
+<a href="https://github.com/SLIITSE/Year3-Sem2/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SLIITSE/Year3-Sem2" />
+</a>
+
 ### Contribution Guide
 
 1. Fork the repository
