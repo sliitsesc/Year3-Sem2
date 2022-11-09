@@ -1,0 +1,97 @@
+
+
+
+CREATE TYPE exchanges_varray as VARRAY(3)
+OF VARCHAR(40)
+/
+
+CREATE TYPE stock_type AS OBJECT
+(
+  companyName VARCHAR(20),
+  currentPrice NUMBER(6,2),
+  exchanges exchanges_varray,
+  lastDivident NUMBER(4,2),
+  eps NUMBER(4,2)
+)
+/
+
+CREATE TYPE address_type AS OBJECT
+(
+  streetNo char(10),
+  streetName char(15),
+  subrub char(20),
+  state char(15),
+  pin char(10),
+)
+/
+
+CREATE TYPE investment_type AS OBJECT(
+   company REF stock_type,
+   purchasePrice NUMBER(6,2),
+   purchaseDate DATE,
+   quantity NUMBER(6),
+)
+/
+
+CREATE TYPE investment_nestedtbl_type AS TABLE OF investmnet_type
+/
+
+CREATE TYPE clients_type AS OBJECT(
+   name VARCHAR(40),
+   address address_type,
+   investment investment_nestedtbl_type
+)
+/
+
+-------TABLE CREATION---------
+
+CREATE TABLE stocks of stock_type(
+  CONSTRAINT stocks_pk PRIMARY KEY(companyName)
+)
+/
+
+CREATE TABLE clients of clients_type(
+  CONSTRAINT clients_pk PRIMARY KEY(name)
+)
+NESTED TABLE investment STORE AS investment_tab
+/
+
+-----INSERT DATA-----------
+
+insert into stocks values (stock_type('INFOSYS',45.00,exchanges_varray('NewYork'),3.00,7.80))
+/
+insert into stocks values (stock_type('GM',60.00,exchanges_varray('NewYork'),2.50,9.20))
+/
+insert into stocks values (stock_type('FORD',40.00,exchanges_varray('NewYork'),2.00,8.50))
+/
+insert into stocks values (stock_type('INTEL',76.50,exchanges_varray('NewYork','London'),5.00,12.40))
+/
+insert into stocks values (stock_type('IBM',70.00,exchanges_varray('NewYork','London','Tokyo'),4.25,10.00))
+/
+insert into stocks values (stock_type('BHP',10.50,exchanges_varray('Sydney',''NewYork'),1.50,3.20))
+/
+
+insert into clients Values
+(Clients_type('John Smith',address_type('3','East AV','Bentley','WA','6102'),
+investment_nestedtbl_type(investment_type((select ref(d) from stocks d where d.companyName='BHP'),12.00,'02-AUG-01',1000),
+                          investment_type((select ref(d) from stocks d where d.companyName='BHP'),10.50,'08-JUN-02',2000),
+                          investment_type((select ref(d) from stocks d where d.companyName='IBM'),58.00,'12-FEB-00',500),
+                          investment_type((select ref(d) from stocks d where d.companyName='IBM'),65.00,'10-APR-01',1200),
+                          investment_type((select ref(d) from stocks d where d.companyName='INFOSYS'),64.00,'11-AUG-01',1000),
+)
+))
+/
+
+insert into clients Values
+(clients_type('jill Brody',address_type('42','Bent St','Perth','WA','6001'),
+investment_nestedtbl_type(investment_type((select ref(d) from stocks d where d.companyName='INTEL'),35.00,'30-JAN-00',300),
+                          investment_type((select ref(d) from stocks d where d.companyName='INTEL'),54.00,'30-JAN-01',400),
+                          investment_type((select ref(d) from stocks d where d.companyName='INTEL'),60.00,'02-OCT-01',200),
+                          investment_type((select ref(d) from stocks d where d.companyName='FORD'),40.00,'05-OCT-99',300),
+                          investment_type((select ref(d) from stocks d where d.companyName='GM'),55.50,'12-DEC-00',500),
+)
+))
+/
+
+
+
