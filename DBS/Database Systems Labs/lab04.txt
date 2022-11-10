@@ -1,0 +1,58 @@
+a.)
+ALTER TYPE st_t AS OBJECT(
+MEMBER FUNCTION yield
+RETURN FLOAT CASCADE;
+)
+/
+CREATE TYPE BODY st_t AS MEMBER FUNCTION yeild RETURN FLOAT IS 
+	    devinded NUMBER;
+            currentprice NUMBER;
+	    BEGIN 
+	      RETURN (SELF.devinded/SELF.currentprice)*100;
+	    END; 
+ 	END;
+	/
+
+b.)
+ALTER TYPE st_t  
+     ADD MEMBER FUNCTION priceInUsd(rate FLOAT)
+     RETURN FLOAT CASCADE
+/
+
+CREATE TYPE BODY st_t AS MEMBER FUNCTION  
+	    priceInUsd(rate FLOAT)
+	    BEGIN 
+		  RETURN rate*SELF.currprice;
+	    END; 
+ 	END;
+	/
+
+c.)
+ALTER TYPE st_t 
+     ADD MEMBER FUNCTION countexch()
+     RETURN NUMBER CASCADE
+/
+
+CREATE TYPE BODY st_t AS MEMBER FUNCTION countexch RETURN NUMBER IS 
+	    excount NUMBER;
+	    BEGIN 
+		    SELECT count(s.exchange) INTO excount      //one employee can have many children thats why chcount
+		    FROM TABLE(self.exchanges) e;
+		    RETURN excount; 
+                    
+	    END; 
+ 	END;
+	/
+d.)
+ALTER TYPE cl_t 
+     ADD MEMBER FUNCTION calpurchasevalue()
+     RETURN FLOAT CASCADE
+/
+
+CREATE TYPE BODY cl_t AS MEMBER FUNCTION  
+	    
+	    BEGIN 
+              RETURN SELF.purp*SELF.qty;
+	    END; 
+ 	END;
+	/
