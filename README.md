@@ -58,3 +58,18 @@ git push --set-upstream origin feature/<BRANCH_NAME>
 ```
 <MODULE NAME>
 ```
+
+### Naming files
+
+For files names use the following convention.
+
+```
+<MODULE CODE>_<FILE NAME>
+eg:-DBS_L01
+```
+
+### For large files
+
+Use git lfs.
+
+_See the guide for more details [Link](https://medium.com/swlh/github-and-large-files-6a8d58ad043d)_
